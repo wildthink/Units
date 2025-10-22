@@ -9,6 +9,7 @@
 import XCTest
 
 final class PercentTests: XCTestCase {
+    
     func testParse() throws {
         XCTAssertEqual(
             try Expression("10m + 25%"),
@@ -38,7 +39,20 @@ final class PercentTests: XCTestCase {
             try Expression("10m / 25%").solve(),
             40.measured(in: .meter)
         )
-
+    }
+    
+    func testPercentCalculation() {
+        XCTAssertEqual(50% * 50%, 25%)
+        XCTAssertEqual(50% + 5.8%, 55.8%)
+        XCTAssertEqual(50% - 50%, 0%)
+        XCTAssertEqual(50% - 5.8%, 44.2%)
+    }
+    
+    func testPercentFormat() {
+        XCTAssertEqual(30%.formatted(), "30%")
+        XCTAssertEqual(28.5%.formatted(), "28.5%")
+        XCTAssertEqual(28.33%.formatted(), "28.33%")
+        XCTAssertEqual(28.33%.formatted(fractionDigits: 1), "28.3%")
+        XCTAssertEqual(28.33%.formatted(fractionDigits: 0), "28%")
     }
 }
-

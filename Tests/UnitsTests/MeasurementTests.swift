@@ -600,4 +600,12 @@ final class MeasurementTests: XCTestCase {
             accuracy: accuracy
         )
     }
+    
+    func testFormatStyle() {
+        let measure = 28.123.measured(in: .meter)
+        XCTAssertEqual(measure.formatted(), "28.123 m")
+        XCTAssertEqual(measure.formatted(precision: .significantDigits(1)), "30 m")
+        XCTAssertEqual(measure.formatted(precision: .significantDigits(3)), "28.1 m")
+        XCTAssertEqual(measure.formatted(precision: .integerAndFractionLength(integer: 2, fraction: 0)), "28 m")
+    }
 }

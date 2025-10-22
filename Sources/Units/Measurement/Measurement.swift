@@ -194,3 +194,58 @@ extension Measurement: ExpressibleByFloatLiteral {
 }
 
 extension Measurement: Sendable {}
+
+// MARK: FormatStyle
+@available(macOS 12.0, iOS 15.0, *)
+public extension Measurement {
+    
+    func formatted<Style: FormatStyle>(
+        _ style: Style
+    ) -> Style.FormatOutput where Style.FormatInput == Self {
+        style.format(self)
+    }
+}
+
+@available(macOS 12.0, iOS 15.0, *)
+public extension Measurement {
+    typealias Precision = NumberFormatStyleConfiguration.Precision
+
+    struct Formatter<Output> {
+        let format: (Measurement) -> Output
+    }
+    
+    func formatted<Output>(_ formatter: Formatter<Output>) -> Output {
+        formatter.format(self)
+    }
+    
+    func formatted(_ formatter: Formatter<String> = .measurement()) -> String {
+        formatter.format(self)
+    }
+    
+    @_disfavoredOverload
+    func formatted(precision: Precision? = nil) -> String {
+        formatted(.measurement(precision: precision))
+    }
+}
+
+@available(macOS 12.0, iOS 15.0, *)
+extension Measurement.Formatter where Output == String {
+    public typealias Precision = NumberFormatStyleConfiguration.Precision
+    
+    public static func measurement(precision: Precision? = nil) -> Self {
+        .init { value in
+            switch (value.unit, precision) {
+                case (.none, .none):
+                    "\(value.value.formatted(.number))"
+                case (.none, .some(let p)):
+                    "\(value.value.formatted(.number.precision(p)))"
+                case (let u, .none):
+                    "\(value.value.formatted(.number)) \(u)"
+                    
+                case (let u, .some(let p)):
+                    "\(value.value.formatted(.number.precision(p))) \(u)"
+            }
+        }
+    }
+}
+

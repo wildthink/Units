@@ -194,6 +194,56 @@ let weeklyCartons = try (workforce * personPickRate).convert(to: carton / .week)
 print(weeklyCartons)  // Prints '350.0 carton/week'
 ```
 
+### Percent
+
+While technically not a `Measurement`, the use of the percent symbol ('%') is still useful
+in conveying the "semanantics" of a scaler value so we include it in this package.
+
+Here’s how math operators work with percentages in typical calculations:
+
+Math operators with percentages treat the percent as its decimal equivalent 
+(e.g., 25% = 0.25) but in the case of `+` and `-` the calculation is less direct.
+ 
+#### Multiplication (100 * 25%)
+ 
+ When you multiply a number by a percentage, you’re finding that percent of the number.
+ • 25% is the same as 0.25.
+ • So, 100 * 25% = 100 * 0.25 = 25.
+ 
+#### Division (100 / 30%)
+ 
+ Dividing by a percentage means dividing by its decimal form.
+ • 30% is 0.3.
+ • So, 100 / 30% = 100 / 0.3 ≈ 333.33.
+ 
+#### Addition (100 + 10%)
+ 
+ Adding a percentage to a number is less direct, but usually means increasing the number by that percent.
+ • 10% of 100 is 10.
+ • So, 100 + 10% = 100 + (100 * 0.10) = 110.
+ 
+#### General Rule
+ • Percent means “per hundred,” so 25% = 25/100 = 0.25.
+ • Replace the percent with its decimal equivalent before performing the operation.
+ 
+
+### FormatStyle
+
+The `Measurement.Formatter` provides the `formatted` method to enable the
+setting of the `NumberFormatStyleConfiguration.Precision` for String output.
+
+Example Use:
+
+```
+    let measure = 28.123.measured(in: .meter)
+
+    measure.formatted() // -> "28.123 m"
+    measure.formatted(precision: .significantDigits(1) // ->  "30 m"
+    measure.formatted(precision: .significantDigits(3)) // -> "28.1 m"
+    measure.formatted(precision: 
+        .integerAndFractionLength(integer: 2, fraction: 0)) // ->  "28 m"
+```
+
 ## CLI
 
 The easiest way to install the CLI is with brew:

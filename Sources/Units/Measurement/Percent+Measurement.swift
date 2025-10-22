@@ -43,7 +43,7 @@ import Foundation
  
  If you see a percent sign in a calculation, just convert it to a decimal and proceed as usual. If you want to know how subtraction works with percentages, or how to handle more complex expressions, let me know!
  */
-public struct Percent: Numeric, Equatable, Codable {
+public struct Percent: Numeric, Codable, Sendable {
     
     public private(set) var magnitude: Double
     
@@ -62,6 +62,14 @@ public struct Percent: Numeric, Equatable, Codable {
     
     func percent(of other: Double) -> Double {
         magnitude * other
+    }
+}
+
+extension Percent: Equatable {
+    /// Implemented as "nearly" equal
+    public static func ==(lhs: Percent, rhs: Percent) -> Bool {
+        lhs.magnitude >= rhs.magnitude.nextDown
+        && lhs.magnitude <= lhs.magnitude.nextUp
     }
 }
 
@@ -199,5 +207,74 @@ public extension Measurement {
             value: lhs.value / rhs.magnitude,
             unit: lhs.unit
         )
+    }
+}
+
+extension Percent: Comparable {
+    public static func < (lhs: Self, rhs: Self) -> Bool {
+        lhs.magnitude < rhs.magnitude
+    }
+}
+
+extension Percent {
+    /**
+     Returns a random value within the given range.
+     
+     ```
+     Percent.random(in: 10%...20%)
+     // 10%, 11%, 12%, 19.98%, etc.
+     ```
+     */
+    public static func random(in range: ClosedRange<Self>) -> Self {
+        self.init(magnitude: .random(in: range.lowerBound.magnitude...range.upperBound.magnitude))
+    }
+}
+
+// MARK: FormatStyle
+@available(macOS 12.0, iOS 15.0, *)
+public extension Percent {
+    
+    func formatted<Style: FormatStyle>(
+        _ style: Style
+    ) -> Style.FormatOutput where Style.FormatInput == Self {
+        style.format(self)
+    }
+}
+
+public extension Percent {
+    struct Formatter<Output> {
+        let format: (Percent) -> Output
+    }
+    
+    func formatted<Output>(_ formatter: Formatter<Output>) -> Output {
+        formatter.format(self)
+    }
+}
+
+@available(macOS 12.0, iOS 15.0, *)
+public extension Percent {
+    func formatted(_ formatter: Formatter<String> = .percent) -> String {
+        formatter.format(self)
+    }
+    
+    func formatted(fractionDigits: Int) -> String {
+        Formatter(fractionDigits: fractionDigits).format(self)
+    }
+}
+
+@available(macOS 12.0, iOS 15.0, *)
+public extension Percent.Formatter where Output == String {
+    
+    init (fractionDigits: Int) {
+        self.init { value in
+            value.magnitude
+                .formatted(.percent.precision(.fractionLength(fractionDigits)))
+        }
+    }
+    
+    static var percent: Self {
+        .init { value in
+            return value.magnitude.formatted(.percent)
+        }
     }
 }

@@ -205,8 +205,8 @@ extension Measurement {
     }
 }
 
+@available(macOS 12.0, *)
 public extension Measurement {
-    @available(macOS 12.0, *)
     typealias Precision = NumberFormatStyleConfiguration.Precision
 
     struct Formatter<Output> {
@@ -217,12 +217,13 @@ public extension Measurement {
         formatter.format(self)
     }
     
-    @available(macOS 12.0, *)
+//    @available(macOS 12.0, *)
     func formatted(_ formatter: Formatter<String> = .measurement()) -> String {
         formatter.format(self)
     }
     
-    @available(macOS 12.0, *)
+//    @available(macOS 12.0, *)
+    @_disfavoredOverload
     func formatted(precision: Precision? = nil) -> String {
         formatted(.measurement(precision: precision))
     }

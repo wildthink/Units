@@ -196,8 +196,9 @@ extension Measurement: ExpressibleByFloatLiteral {
 extension Measurement: Sendable {}
 
 // MARK: FormatStyle
-@available(macOS 12.0, *)
-extension Measurement {
+@available(macOS 12.0, iOS 15.0, *)
+public extension Measurement {
+    
     func formatted<Style: FormatStyle>(
         _ style: Style
     ) -> Style.FormatOutput where Style.FormatInput == Self {
@@ -205,7 +206,7 @@ extension Measurement {
     }
 }
 
-@available(macOS 12.0, *)
+@available(macOS 12.0, iOS 15.0, *)
 public extension Measurement {
     typealias Precision = NumberFormatStyleConfiguration.Precision
 
@@ -217,19 +218,17 @@ public extension Measurement {
         formatter.format(self)
     }
     
-//    @available(macOS 12.0, *)
     func formatted(_ formatter: Formatter<String> = .measurement()) -> String {
         formatter.format(self)
     }
     
-//    @available(macOS 12.0, *)
     @_disfavoredOverload
     func formatted(precision: Precision? = nil) -> String {
         formatted(.measurement(precision: precision))
     }
 }
 
-@available(macOS 12.0, *)
+@available(macOS 12.0, iOS 15.0, *)
 extension Measurement.Formatter where Output == String {
     public typealias Precision = NumberFormatStyleConfiguration.Precision
     

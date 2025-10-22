@@ -231,8 +231,9 @@ extension Percent {
 }
 
 // MARK: FormatStyle
-@available(macOS 12.0, *)
-extension Percent {
+@available(macOS 12.0, iOS 15.0, *)
+public extension Percent {
+    
     func formatted<Style: FormatStyle>(
         _ style: Style
     ) -> Style.FormatOutput where Style.FormatInput == Self {
@@ -240,7 +241,7 @@ extension Percent {
     }
 }
 
-extension Percent {
+public extension Percent {
     struct Formatter<Output> {
         let format: (Percent) -> Output
     }
@@ -250,8 +251,8 @@ extension Percent {
     }
 }
 
-@available(macOS 12.0, *)
-extension Percent {
+@available(macOS 12.0, iOS 15.0, *)
+public extension Percent {
     func formatted(_ formatter: Formatter<String> = .percent) -> String {
         formatter.format(self)
     }
@@ -261,8 +262,8 @@ extension Percent {
     }
 }
 
-@available(macOS 12.0, *)
-extension Percent.Formatter where Output == String {
+@available(macOS 12.0, iOS 15.0, *)
+public extension Percent.Formatter where Output == String {
     
     init (fractionDigits: Int) {
         self.init { value in

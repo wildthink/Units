@@ -604,8 +604,8 @@ final class MeasurementTests: XCTestCase {
     func testFormatStyle() {
         let measure = 28.123.measured(in: .meter)
         XCTAssertEqual(measure.formatted(), "28.123 m")
-        XCTAssertEqual(measure.formatted(precision: .significantDigits(1)), "30 m")
-        XCTAssertEqual(measure.formatted(precision: .significantDigits(3)), "28.1 m")
-        XCTAssertEqual(measure.formatted(precision: .integerAndFractionLength(integer: 2, fraction: 0)), "28 m")
+        XCTAssertEqual(measure.formatted(minimumFractionDigits: 4), "28.1230 m")
+        XCTAssertEqual(measure.formatted(maximumFractionDigits: 0), "28 m")
+        XCTAssertEqual(measure.formatted(maximumFractionDigits: 1), "28.1 m")
     }
 }

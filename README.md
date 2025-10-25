@@ -237,11 +237,10 @@ Example Use:
 ```
     let measure = 28.123.measured(in: .meter)
 
-    measure.formatted() // -> "28.123 m"
-    measure.formatted(precision: .significantDigits(1) // ->  "30 m"
-    measure.formatted(precision: .significantDigits(3)) // -> "28.1 m"
-    measure.formatted(precision: 
-        .integerAndFractionLength(integer: 2, fraction: 0)) // ->  "28 m"
+    measure.formatted()  // -> "28.123 m"
+    measure.formatted(minimumFractionDigits: 4)  // -> "28.1230 m"
+    measure.formatted(maximumFractionDigits: 0)  // -> "28 m"
+    measure.formatted(maximumFractionDigits: 1)  // -> "28.1 m"
 ```
 
 ## CLI

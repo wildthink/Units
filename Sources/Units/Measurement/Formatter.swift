@@ -1,11 +1,3 @@
-//
-//  Formatter.swift
-//  Units
-//  (aka Fountation.FormatStyle)
-//
-//  Created by Jason Jobe on 10/24/25.
-//
-
 public extension Measurement {
     struct Formatter<Output> {
         let format: (Measurement) -> Output
@@ -48,6 +40,19 @@ extension Measurement.Formatter where Output == String {
 
 
 // MARK: Percent Formatter
+// Implementation
+import Foundation
+extension NumberFormatter {
+    func string(from measurement: Measurement) -> String {
+        return "\(self.string(from: .init(value: measurement.value)) ?? "BAD") \(measurement.unit.symbol)"
+    }
+}
+
+// Usage
+//let measurement = 28.123.measured(in: .meter)
+//let formatter = NumberFormatter()
+//formatter.maximumFractionDigits = 2
+//print(formatter.string(from: measurement)) // Prints `28.12 m`
 
 public extension Percent {
     struct Formatter<Output> {
